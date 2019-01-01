@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AI Asteroids</title>
+    <script src="dist/main.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Aldrich|Paytone+One" rel="stylesheet">
+    <style>
+      body {
+        background: dimgray;
+      }
+      header h1 {
+        font-family: 'Paytone One', sans-serif;
+        font-style: italic;
+        text-align: center;
+        text-transform: uppercase;
+        color: yellow;
+        text-shadow: 1px -1px black,
+                     1px 1px black,
+                     -1px -1px black,
+                     -1px 1px black,
+                     3px -3px red,
+                     3px 0 red,
+                     3px 3px red,
+                     0 -3px red,
+                     0 3px red,
+                     -3px -3px red,
+                     -3px 0 red,
+                     -3px 3px red;    
+      }
+      canvas {
+        background: black;
+        margin: 0 auto;
+        width: 720px;
+        height: 480px;
+        display: block;
+      }
+      footer p {
+        font-family: 'Aldrich', sans-serif;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>AI Asteroids</h1>
+    </header>
+    <canvas width="720" height="480"></canvas>
+    <footer>
+      <p>&copy; 2019 Bill Robitske, Jr. &mdash; Source available on GitHub (MIT License)</p>
+    </footer>
+  </body>
+</html>

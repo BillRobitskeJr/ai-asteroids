@@ -1,0 +1,25 @@
+{
+  "name": "ai-asteroids",
+  "version": "1.0.0",
+  "description": "An Asteroids-like game for experimenting with machine learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "build-watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BillRobitskeJr/ai-asteroids.git"
+  },
+  "author": "Bill Robitske, Jr.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BillRobitskeJr/ai-asteroids/issues"
+  },
+  "homepage": "https://github.com/BillRobitskeJr/ai-asteroids#readme",
+  "devDependencies": {
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.1.2"
+  }
+}
