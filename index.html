@@ -5,8 +5,13 @@
     <script src="dist/main.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Aldrich|Paytone+One" rel="stylesheet">
     <style>
+      * {
+        box-sizing: border-box;
+      }
       body {
         background: dimgray;
+        margin: 0 auto;
+        width: 1000px;
       }
       header h1 {
         font-family: 'Paytone One', sans-serif;
@@ -30,13 +35,17 @@
       canvas {
         background: black;
         margin: 0 auto;
-        width: 720px;
-        height: 480px;
         display: block;
+        margin: 0;
       }
       footer p {
         font-family: 'Aldrich', sans-serif;
         text-align: center;
+      }
+      section {
+        display: inline-block;
+        margin: 9px;
+        padding: 0;
       }
     </style>
   </head>
@@ -44,7 +53,12 @@
     <header>
       <h1>AI Asteroids</h1>
     </header>
-    <canvas width="720" height="480"></canvas>
+    <section id="player-view">
+      <canvas width="480" height="480"></canvas>
+    </section>
+    <section id="observer-view">
+      <canvas width="480" height="480"></canvas>
+    </section>
     <footer>
       <p>&copy; 2019 Bill Robitske, Jr. &mdash; Source available on GitHub (MIT License)</p>
     </footer>
