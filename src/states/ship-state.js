@@ -13,8 +13,8 @@ export default class ShipState {
       y: this.position.y + this.velocity.speed * interval * Math.cos(angle)
     };
     this.position = {
-      x: newPosition.x >= 0 ? newPosition.x % 1 : 1 - newPosition.x,
-      y: newPosition.y >= 0 ? newPosition.y % 1 : 1 - newPosition.y
+      x: newPosition.x >= 0 ? newPosition.x % 1 : 1 + newPosition.x,
+      y: newPosition.y >= 0 ? newPosition.y % 1 : 1 + newPosition.y
     };
   }
 }
