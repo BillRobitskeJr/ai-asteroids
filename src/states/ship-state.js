@@ -1,20 +1,22 @@
+import Matrix from '../math/matrix';
+
 export default class ShipState {
-  constructor(state) {
-    const { position, velocity, heading } = state;
-    this.position = position;
-    this.velocity = velocity;
-    this.heading = heading;
+  constructor(gameState) {
+    this.gameState = gameState;
+    this.position = new Matrix(2, 1);
+    this.velocity = new Matrix(2, 1);
+    this.heading = heading || 0;
+    this.thrust = thrust || 0;
   }
 
-  tickPosition(interval) {
-    const angle = 2 * Math.PI * this.velocity.heading;
-    const newPosition = {
-      x: this.position.x + this.velocity.speed * interval * Math.sin(angle),
-      y: this.position.y + this.velocity.speed * interval * Math.cos(angle)
-    };
-    this.position = {
-      x: newPosition.x >= 0 ? newPosition.x % 1 : 1 + newPosition.x,
-      y: newPosition.y >= 0 ? newPosition.y % 1 : 1 + newPosition.y
-    };
+  update(interval) {
+    if (this.thrust > 0) {
+      const acceleration = new Matrix(2, 1, [
+        this.thrust * Math.cos(this.heading),
+        this.thrust * Math.sin(this.heading)
+      ]);
+      this.velocity = Matrix.add(this.velocity, acceleration.scale(interval));
+    }
+    this.position = this.gameState.normalizePoint(Matrix.add(this.position, this.velocity.scale(interval)));
   }
 }

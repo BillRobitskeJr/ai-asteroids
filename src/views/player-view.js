@@ -1,9 +1,9 @@
 import View from './view';
 
 export default class PlayerView extends View {
-  constructor(ctx, width, height, playerState) {
-    super(ctx, width, height);
-    this.playerState = playerState;
+  constructor(canvas, shipState) {
+    super(canvas);
+    this.shipState = shipState;
   }
 
   update(gameState) {

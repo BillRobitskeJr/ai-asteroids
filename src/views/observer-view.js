@@ -1,33 +1,39 @@
 import View from './view';
+import Matrix from '../math/matrix';
 
 export default class ObserverView extends View {
-  constructor(ctx, width, height) {
-    super(ctx, width, height);
+  constructor(canvas) {
+    super(canvas);
   }
 
   update(gameState) {
     super.update(gameState);
-    gameState.ships.forEach(ship => this.drawShip(ship, gameState.size));
+    const scaling = new Matrix(2, 1, [
+      canvas.width / gameState.size.element(1),
+      canvas.height / gameState.size.element(2)
+    ]);
+    gameState.ships.forEach(ship => this.drawShip(ship.position, ship.heading, scaling));
   }
 
-  drawShip(shipState, size) {
-    const center = {
-      x: size.width * shipState.position.x,
-      y: size.height * shipState.position.y
-    };
-    const heading = 2 * Math.PI * shipState.heading;
-    const rotate = {
-      x: (x, y) => x * Math.cos(heading) + y * Math.sin(heading),
-      y: (x, y) => y * Math.cos(heading) - x * Math.sin(heading)
-    }
-
+  drawShip(center, heading, scaling) {
+    const ship = [
+      new Matrix(2, 1, [15, 0]),
+      new Matrix(2, 1, [-15, -10]),
+      new Matrix(2, 1, [-10, 0]),
+      new Matrix(2, 1, [-15, 10])
+    ];
+    const rotation = new Matrix(2, 2, [
+      Math.cos(heading), -1 * Math.sin(heading),
+      Math.sin(heading), Math.cos(heading)
+    ]);
+    const points = Matrix.Matrix.multiply(rotation, ship);
+    
     this.ctx.fillStyle = 'black';
     this.ctx.strokeStyle = 'white';
     this.ctx.beginPath();
-    this.ctx.moveTo(center.x + rotate.x(0, -15), center.y + rotate.y(0, -15));
-    this.ctx.lineTo(center.x + rotate.x(10, 15), center.y + rotate.y(10, 15));
-    this.ctx.lineTo(center.x + rotate.x(0, 10), center.y + rotate.y(0, 10));
-    this.ctx.lineTo(center.x + rotate.x(-10, 15), center.y + rotate.y(-10, 15));
+    points.forEach((point, i) => {
+      
+    });
     this.ctx.closePath();
     this.ctx.fill();
     this.ctx.stroke();

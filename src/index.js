@@ -4,30 +4,27 @@ import ShipState from './states/ship-state';
 import GameState from './states/game-state';
 import HumanPlayer from './players/human-player';
 
+const FRAMERATE = 30;
+
 window.addEventListener('load', () => {
   const gameState = new GameState({
-    size: { width: 480, height: 480 },
-    refreshRate: 60
+    size: [480, 480]
   });
-  const playerState = gameState.addShip(new ShipState({
-    position: { x: 0.5, y: 0.5 },
-    velocity: { heading: 0, speed: 0 },
-    heading: 0
-  }));
+  const shipState = gameState.addShip();
 
   const player = new HumanPlayer({
-    shipState: playerState
+    shipState
   });
 
   const playerView = new PlayerView(document.querySelector('#player-view canvas').getContext('2d'), 480, 480, playerState);
   const observerView = new ObserverView(document.querySelector('#observer-view canvas').getContext('2d'), 480, 480);
 
   setInterval(() => {
-    player.takeAction(1 / gameState.refreshRate);
+    player.takeAction(1 / FRAMERATE);
 
-    gameState.tickShips();
+    gameState.update(1 / FRAMERATE);
 
     playerView.update(gameState);
     observerView.update(gameState);
-  }, 1000 / gameState.refreshRate);
+  }, 1000 / FRAMERATE);
 });
