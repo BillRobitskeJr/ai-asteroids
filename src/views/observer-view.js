@@ -9,7 +9,7 @@ export default class ObserverView extends View {
   update(gameState) {
     super.update(gameState);
     const transform = this.createCoordinateTransform(gameState.size);
-    gameState.ships.forEach(ship => this.drawShip(ship.position, ship.heading, transform));
+    gameState.ships.forEach(ship => this.drawShip(ship.position, ship.heading, ship.thrust, transform));
   }
 
   createCoordinateTransform(gameSize) {
@@ -25,23 +25,37 @@ export default class ObserverView extends View {
     return point => Matrix.add(Matrix.entrywiseProduct(Matrix.entrywiseProduct(point, scaling), invertY), shiftOrigin);
   }
 
-  drawShip(center, heading, transform) {
+  drawShip(center, heading, thrust, transform) {
     const ship = [
       new Matrix(2, 1, [15, 0]),
       new Matrix(2, 1, [-15, -10]),
       new Matrix(2, 1, [-10, 0]),
       new Matrix(2, 1, [-15, 10])
     ];
+    const engine = [
+      new Matrix(2, 1, [-12.5, -5]),
+      new Matrix(2, 1, [-20, 0]),
+      new Matrix(2, 1, [-12.5, 5])
+    ];
     const rotation = new Matrix(2, 2, [
       Math.cos(heading), -1 * Math.sin(heading),
       Math.sin(heading), Math.cos(heading)
     ]);
-    const points = ship.map(point => Matrix.add(Matrix.multiply(rotation, point), center));
+    const enginePoints = engine.map(point => Matrix.add(Matrix.multiply(rotation, point), center));
+    const shipPoints = ship.map(point => Matrix.add(Matrix.multiply(rotation, point), center));
     
     this.ctx.fillStyle = 'black';
     this.ctx.strokeStyle = 'white';
+    if (thrust) {
+      this.ctx.beginPath();
+      enginePoints.forEach((point, i) => {
+        const canvasPoint = transform(point);
+        this.ctx[i === 0 ? 'moveTo' : 'lineTo'](canvasPoint.element(1), canvasPoint.element(2));
+      });
+      this.ctx.stroke();
+    }
     this.ctx.beginPath();
-    points.forEach((point, i) => {
+    shipPoints.forEach((point, i) => {
       const canvasPoint = transform(point);
       this.ctx[i === 0 ? 'moveTo' : 'lineTo'](canvasPoint.element(1), canvasPoint.element(2));
     });
