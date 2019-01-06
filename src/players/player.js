@@ -2,6 +2,7 @@ export default class Player {
   constructor(state) {
     const { shipState } = state;
     this.shipState = shipState;
+    console.log(this.shipState);
 
     this.rotationSpeed = 1;
     this.thrustMagnitude = 1;
@@ -18,6 +19,7 @@ export default class Player {
   }
 
   takeAction(interval) {
+    console.log(this.keyFlags);
     if (this.hyperspaceCharge < 1) this.hyperspaceCharge += this.hyperspaceChargeRate * interval;
 
     if (this.keyFlags.turnLeft && !this.keyFlags.turnRight) this.turnLeft(interval);
@@ -67,10 +69,7 @@ export default class Player {
 
   hyperspaceJump(interval) {
     if (this.hyperspaceCharge < 1) return;
-    this.shipState.position = {
-      x: Math.random(),
-      y: Math.random()
-    };
+    this.shipState.position = this.shipState.gameState.getRandomPosition();
     this.hyperspaceCharge--;
   }
 }

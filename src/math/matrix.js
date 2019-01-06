@@ -11,18 +11,18 @@ export default class Matrix {
       if (i <= 0) throw new RangeError(`Row index (${i}) must be greater than 0.`);
       if (this.columns === 1 && i > this.rows) throw new RangeError(`Index (${i}) cannot be greater than the number of elements (${this.rows}).`);
       if (this.rows === 1 && i > this.columns) throw new RangeError(`Index (${i}) cannot be greater than the number of elements (${this.columns}).`);
-      return this.values[i];
+      return this.values[i - 1];
     } else {
       if (i <= 0) throw new RangeError(`Row index (${i}) must be greater than 0.`);
       if (i > this.rows) throw new RangeError(`Row index (${i}) cannot be greater than the number of rows (${this.rows}).`);
       if (j <= 0) throw new RangeError(`Row index (${j}) must be greater than 0.`);
       if (j > this.columns) throw new RangeError(`Row index (${j}) cannot be greater than the number of rows (${this.columns}).`);
-      return this.values[i * this.columns + j];
+      return this.values[(i - 1) * this.columns + (j - 1)];
     }
   }
 
   scale(scalar) {
-    new Matrix(this.rows, this.columns, this.values.map(x => scalar * x));
+    return new Matrix(this.rows, this.columns, this.values.map(x => scalar * x));
   }
 
   static add(matrix1, matrix2) {
@@ -32,12 +32,12 @@ export default class Matrix {
   }
 
   static multiply(matrix1, matrix2) {
-    if (matrix1.columns !== matrix2.rows) throw new TypeError(`Second matrix must have the same number of rows as the first matrix has columns.`);
+    if (matrix1.columns !== matrix2.rows) throw new TypeError(`Second matrix must have the same number of rows (${matrix2.rows}) as the first matrix has columns (${matrix1.columns}).`);
     const newMatrix = new Matrix(matrix1.rows, matrix2.columns);
-    for (let i = 0; i < newMatrix.rows; ++i) {
-      for (let j = 0; j < newMatrix.columns; ++j) {
-        for (let k = 0; k < matrix1.columns; ++k) {
-          newMatrix[i * newMatrix.columns + j] += matrix1.element(i, k) * matrix2.element(k, j);
+    for (let i = 1; i <= newMatrix.rows; ++i) {
+      for (let j = 1; j <= newMatrix.columns; ++j) {
+        for (let k = 1; k <= matrix1.columns; ++k) {
+          newMatrix.values[(i - 1) * newMatrix.columns + (j - 1)] += matrix1.element(i, k) * matrix2.element(k, j);
         }
       }
     }
@@ -47,6 +47,6 @@ export default class Matrix {
   static entrywiseProduct(matrix1, matrix2) {
     if (matrix1.rows !== matrix2.rows) throw new TypeError(`Matrices must have the same number of rows.`);
     if (matrix1.columns !== matrix2.columns) throw new TypeError(`Matrices must have the same number of columns.`);
-    return new Matrix(matrix1.rows, matrix1.columns, matrix1.values.map((x, i) => x + matrix2.values[i]));
+    return new Matrix(matrix1.rows, matrix1.columns, matrix1.values.map((x, i) => x * matrix2.values[i]));
   }
 }

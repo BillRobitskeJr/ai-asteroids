@@ -1,8 +1,8 @@
 import PlayerView from './views/player-view';
 import ObserverView from './views/observer-view';
-import ShipState from './states/ship-state';
 import GameState from './states/game-state';
 import HumanPlayer from './players/human-player';
+import Matrix from './math/matrix';
 
 const FRAMERATE = 30;
 
@@ -12,12 +12,11 @@ window.addEventListener('load', () => {
   });
   const shipState = gameState.addShip();
 
-  const player = new HumanPlayer({
-    shipState
-  });
+  console.log(shipState);
+  const player = new HumanPlayer({ shipState });
 
-  const playerView = new PlayerView(document.querySelector('#player-view canvas').getContext('2d'), 480, 480, playerState);
-  const observerView = new ObserverView(document.querySelector('#observer-view canvas').getContext('2d'), 480, 480);
+  const playerView = new PlayerView(document.querySelector('#player-view canvas'), shipState);
+  const observerView = new ObserverView(document.querySelector('#observer-view canvas'));
 
   setInterval(() => {
     player.takeAction(1 / FRAMERATE);
