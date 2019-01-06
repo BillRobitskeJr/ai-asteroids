@@ -9,6 +9,7 @@ export default class ObserverView extends View {
   update(gameState) {
     super.update(gameState);
     const transform = this.createCoordinateTransform(gameState.size);
+    gameState.shots.forEach(shot => this.drawShot(shot.position, transform));
     gameState.ships.forEach(ship => this.drawShip(ship.position, ship.heading, ship.thrust, transform));
   }
 
@@ -62,5 +63,12 @@ export default class ObserverView extends View {
     this.ctx.closePath();
     this.ctx.fill();
     this.ctx.stroke();
+  }
+
+  drawShot(position, transform) {
+    const point = transform(position);
+
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillRect(point.element(1), point.element(2), 1, 1);
   }
 }

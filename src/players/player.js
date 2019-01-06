@@ -8,6 +8,7 @@ export default class Player {
     this.thrustMagnitude = Math.min(this.shipState.gameState.size.element(1), this.shipState.gameState.size.element(2));
     this.hyperspaceCharge = 0;
     this.hyperspaceChargeRate = 1;
+    this.shotSpeed = 200;
 
     this.keyFlags = {
       turnRight: false,
@@ -52,7 +53,7 @@ export default class Player {
   }
 
   shoot(interval) {
-
+    this.shipState.gameState.addShot(this.shipState, this.shotSpeed);
   }
 
   hyperspaceJump(interval) {

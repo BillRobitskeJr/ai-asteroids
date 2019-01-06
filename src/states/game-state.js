@@ -1,4 +1,5 @@
 import ShipState from './ship-state';
+import ShotState from './shot-state';
 import Matrix from '../math/matrix';
 
 export default class GameState {
@@ -6,6 +7,7 @@ export default class GameState {
     const { size } = state;
     this.size = new Matrix(2, 1, size || [100, 100]);
     this.ships = [];
+    this.shots = [];
   }
 
   addShip() {
@@ -18,10 +20,28 @@ export default class GameState {
     return shipState;
   }
 
-  update(interval) {
-    this.ships.forEach(ship => {
-      ship.update(interval);
+  addShot(fromShip, speed) {
+    const rotation = new Matrix(2, 2, [
+      Math.cos(fromShip.heading), -1 * Math.sin(fromShip.heading),
+      Math.sin(fromShip.heading), Math.cos(fromShip.heading)
+    ]);
+    const velocity = new Matrix(2, 1, [
+      speed * Math.cos(fromShip.heading),
+      speed * Math.sin(fromShip.heading)
+    ]);
+    const shotState = new ShotState(this, {
+      position: Matrix.add(fromShip.position,
+                           Matrix.multiply(rotation,
+                                           new Matrix(2, 1, [15, 0]))),
+      velocity: Matrix.add(velocity, fromShip.velocity)
     });
+    this.shots.push(shotState);
+    return shotState;
+  }
+
+  update(interval) {
+    this.shots.forEach(shot => { shot.update(interval); });
+    this.ships.forEach(ship => { ship.update(interval); });
   }
 
   normalizePoint(point) {

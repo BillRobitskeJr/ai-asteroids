@@ -4,7 +4,7 @@ import GameState from './states/game-state';
 import HumanPlayer from './players/human-player';
 import Matrix from './math/matrix';
 
-const FRAMERATE = 30;
+const FRAMERATE = 60;
 
 window.addEventListener('load', () => {
   const gameState = new GameState({
