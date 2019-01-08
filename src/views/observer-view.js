@@ -11,6 +11,7 @@ export default class ObserverView extends View {
     const transform = this.createCoordinateTransform(gameState.size);
     gameState.shots.forEach(shot => this.drawShot(shot.position, transform));
     gameState.ships.forEach(ship => this.drawShip(ship.position, ship.heading, ship.thrust, transform));
+    gameState.asteroids.forEach(asteroid => this.drawAsteroid(asteroid, transform));
   }
 
   createCoordinateTransform(gameSize) {
@@ -70,5 +71,23 @@ export default class ObserverView extends View {
 
     this.ctx.fillStyle = 'white';
     this.ctx.fillRect(point.element(1), point.element(2), 1, 1);
+  }
+
+  drawAsteroid(asteroidState, transform) {
+    const rotation = new Matrix(2, 2, [
+      Math.cos(asteroidState.angle), -1 * Math.sin(asteroidState.angle),
+      Math.sin(asteroidState.angle), Math.cos(asteroidState.angle)
+    ]);
+    const points = asteroidState.points.map(point => transform(Matrix.add(asteroidState.position, Matrix.multiply(rotation, point))));
+
+    this.ctx.fillStyle = 'black';
+    this.ctx.strokeStyle = 'white';
+    this.ctx.beginPath();
+    points.forEach((point, i) => {
+      this.ctx[i === 0 ? 'moveTo' : 'lineTo'](point.element(1), point.element(2));
+    });
+    this.ctx.closePath();
+    this.ctx.fill();
+    this.ctx.stroke();
   }
 }

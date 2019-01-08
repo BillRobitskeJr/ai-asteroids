@@ -1,13 +1,17 @@
 import ShipState from './ship-state';
 import ShotState from './shot-state';
+import AsteroidState from './asteroid-state';
 import Matrix from '../math/matrix';
 
 export default class GameState {
   constructor(state) {
     const { size } = state;
+    this.asteroidInterval = 5;
+    this.asteroidDelay = 0;
     this.size = new Matrix(2, 1, size || [100, 100]);
     this.ships = [];
     this.shots = [];
+    this.asteroids = [];
   }
 
   addShip() {
@@ -39,9 +43,29 @@ export default class GameState {
     return shotState;
   }
 
+  addAsteroid() {
+    const asteroid = new AsteroidState(this, {
+      radius: 40,
+      position: this.getRandomPosition(),
+      velocity: this.getRandomVelocity(),
+      angle: Math.random() * 2 * Math.PI,
+      angularVelocity: Math.random() * 2 * Math.PI
+    });
+    this.asteroids.push(asteroid);
+    return asteroid;
+  }
+
   update(interval) {
     this.shots.forEach(shot => { shot.update(interval); });
     this.ships.forEach(ship => { ship.update(interval); });
+    this.asteroids.forEach(asteroid => { asteroid.update(interval); });
+
+    this.asteroidDelay += interval;
+    if (this.asteroidDelay >= this.asteroidInterval) {
+      const asteroid = this.addAsteroid();
+      console.log(asteroid);
+      this.asteroidDelay = 0;
+    }
   }
 
   normalizePoint(point) {

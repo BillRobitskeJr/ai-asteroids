@@ -2,7 +2,6 @@ export default class Player {
   constructor(state) {
     const { shipState } = state;
     this.shipState = shipState;
-    console.log(this.shipState);
 
     this.rotationSpeed = 2 * Math.PI;
     this.thrustMagnitude = Math.min(this.shipState.gameState.size.element(1), this.shipState.gameState.size.element(2));
@@ -20,7 +19,6 @@ export default class Player {
   }
 
   takeAction(interval) {
-    console.log(this.keyFlags);
     if (this.hyperspaceCharge < 1) this.hyperspaceCharge += this.hyperspaceChargeRate * interval;
 
     if (this.keyFlags.turnLeft && !this.keyFlags.turnRight) this.turnLeft(interval);
