@@ -12,7 +12,6 @@ window.addEventListener('load', () => {
   });
   const shipState = gameState.addShip();
 
-  console.log(shipState);
   const player = new HumanPlayer({ shipState });
 
   const playerView = new PlayerView(document.querySelector('#player-view canvas'), shipState);

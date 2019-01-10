@@ -21,6 +21,10 @@ export default class Matrix {
     }
   }
 
+  get vectorLength() {
+    return Math.sqrt(this.values.reduce((sum, value) => sum + Math.pow(value, 2), 0));
+  }
+
   scale(scalar) {
     return new Matrix(this.rows, this.columns, this.values.map(x => scalar * x));
   }
@@ -29,6 +33,12 @@ export default class Matrix {
     if (matrix1.rows !== matrix2.rows) throw new TypeError('Matrices must have the same number of rows.');
     if (matrix1.columns !== matrix2.columns) throw new TypeError('Matrices must have the same number of columns.');
     return new Matrix(matrix1.rows, matrix1.columns, matrix1.values.map((x, i) => x + matrix2.values[i]));
+  }
+
+  static subtract(matrix1, matrix2) {
+    if (matrix1.rows !== matrix2.rows) throw new TypeError('Matrices must have the same number of rows.');
+    if (matrix1.columns !== matrix2.columns) throw new TypeError('Matrices must have the same number of columns.');
+    return new Matrix(matrix1.rows, matrix1.columns, matrix1.values.map((x, i) => x - matrix2.values[i]));
   }
 
   static multiply(matrix1, matrix2) {
@@ -48,5 +58,11 @@ export default class Matrix {
     if (matrix1.rows !== matrix2.rows) throw new TypeError(`Matrices must have the same number of rows.`);
     if (matrix1.columns !== matrix2.columns) throw new TypeError(`Matrices must have the same number of columns.`);
     return new Matrix(matrix1.rows, matrix1.columns, matrix1.values.map((x, i) => x * matrix2.values[i]));
+  }
+
+  static vectorDistance(matrix1, matrix2) {
+    if (matrix1.rows > 1 && matrix1.columns > 1) throw new TypeError(`First matrix must be 1-dimensional.`);
+    if (matrix2.rows > 1 && matrix2.columns > 1) throw new TypeError(`Second matrix must be 1-dimensional.`);
+    return Math.sqrt(matrix1.values.reduce((sum, x, i) => sum + Math.pow(x - matrix2.values[i], 2), 0));
   }
 }

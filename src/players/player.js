@@ -4,7 +4,7 @@ export default class Player {
     this.shipState = shipState;
 
     this.rotationSpeed = 2 * Math.PI;
-    this.thrustMagnitude = Math.min(this.shipState.gameState.size.element(1), this.shipState.gameState.size.element(2));
+    this.thrustMagnitude = 100;
     this.hyperspaceCharge = 0;
     this.hyperspaceChargeRate = 1;
     this.shotSpeed = 200;
