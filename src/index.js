@@ -10,19 +10,19 @@ window.addEventListener('load', () => {
   const gameState = new GameState({
     size: [480, 480]
   });
-  const shipState = gameState.addShip();
+  // const shipState = gameState.addShip();
 
-  const player = new HumanPlayer({ shipState });
+  // const player = new HumanPlayer({ shipState });
 
-  const playerView = new PlayerView(document.querySelector('#player-view canvas'), shipState);
+  // const playerView = new PlayerView(document.querySelector('#player-view canvas'), shipState);
   const observerView = new ObserverView(document.querySelector('#observer-view canvas'));
 
   setInterval(() => {
-    player.takeAction(1 / FRAMERATE);
+    // player.takeAction(1 / FRAMERATE);
 
     gameState.update(1 / FRAMERATE);
 
-    playerView.update(gameState);
+    // playerView.update(gameState);
     observerView.update(gameState);
   }, 1000 / FRAMERATE);
 });

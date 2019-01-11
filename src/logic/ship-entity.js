@@ -2,7 +2,7 @@ import Entity from './entity';
 import Matrix from '../math/matrix';
 import { basename } from 'path';
 
-const AVG_DENSITY = 101;
+const AVG_DENSITY = 0.101;
 const BASE_RADIUS = 13;
 
 export default class ShipEntity extends Entity {

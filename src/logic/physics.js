@@ -46,7 +46,7 @@ export default class Physics {
     const getMomentumChanges = (object, impactor) => {
       const velocity = Matrix.subtract(impactor.velocity, object.velocity);
       const distance = Matrix.vectorDistance(object.position, impactor.position);
-      const rotAngle = Math.PI + (velocity.element(2) < 0 ? -1 : 1) * Math.acos((impactor.position.element(1) - object.position.element(1)) / distance);
+      const rotAngle = Math.PI + (velocity.element(2) < 0 ? -1 : 1) * Math.asin((impactor.position.element(1) - object.position.element(1)) / distance);
       const rotation1 = new Matrix(2, 2, [
         Math.cos(rotAngle), -1 * Math.sin(rotAngle),
         Math.sin(rotAngle), Math.cos(rotAngle)
@@ -68,6 +68,7 @@ export default class Physics {
       }
     };
     const applyMomentumDeltas = (entity, delta1, delta2) => {
+      console.log(`Linear Momentum: ${entity.linearMomentum.toString()} + ${delta1.linear.toString()} + ${delta2.linear.toString()} = ${Matrix.add(entity.linearMomentum, Matrix.add(delta1.linear, delta2.linear)).toString()}`);
       entity.linearMomentum = Matrix.add(entity.linearMomentum, Matrix.add(delta1.linear, delta2.linear));
       entity.angularMomentum = entity.angularMomentum + delta1.angular + delta2.angular;
     };

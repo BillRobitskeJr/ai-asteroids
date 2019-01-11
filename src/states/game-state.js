@@ -6,9 +6,9 @@ import AsteroidEntity from '../logic/asteroid-entity';
 export default class GameState {
   constructor(state) {
     const { size } = state;
-    this.asteroidInterval = 5;
+    this.asteroidInterval = 0.5;
     this.asteroidDelay = 0;
-    this.asteroidLimit = 5;
+    this.asteroidLimit = 2;
     this.size = new Matrix(2, 1, size || [100, 100]);
     this.physics = new Physics({
       spaceSize: new Matrix(2, 1, size || [100, 100])

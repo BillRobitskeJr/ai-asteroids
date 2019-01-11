@@ -25,6 +25,7 @@ export default class Entity {
   }
 
   set linearMomentum(momentum) {
+    if (isNaN(momentum.element(1)) || isNaN(momentum.element(2))) return console.error(`Invalid Linear Momenum:`, this, momentum);
     this.velocity = momentum.scale(1 / this.mass);
   }
 
@@ -33,6 +34,7 @@ export default class Entity {
   }
 
   set angularMomentum(momentum) {
+    if (isNaN(momentum)) return console.error(`Invalid Angular Momentum:`, this, momentum);
     this.angularVelocity = momentum / (this.mass * Math.pow(this.radius, 2) / 2);
   }
 

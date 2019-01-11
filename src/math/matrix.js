@@ -21,6 +21,19 @@ export default class Matrix {
     }
   }
 
+  toString() {
+    if (this.rows === 1 || this.columns === 1) return `[${this.values.join(',')}]`;
+    const rows = [];
+    for (let i = 0; i < this.rows; ++i) {
+      let row = [];
+      for (let j = 0; j < this.columns; ++j) {
+        row.push(this.values[i * this.columns + j]);
+      }
+      rows.push(`[${row.join(',')}]`);
+    }
+    return `[${rows.join('\n ')}]`;
+  }
+
   get vectorLength() {
     return Math.sqrt(this.values.reduce((sum, value) => sum + Math.pow(value, 2), 0));
   }

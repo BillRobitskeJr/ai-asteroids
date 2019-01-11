@@ -2,7 +2,7 @@ import Entity from './entity';
 import Matrix from '../math/matrix';
 import gaussianRandom from '../math/gaussian-random';
 
-const AVG_DENSITY = 2000000;
+const AVG_DENSITY = 2;
 const BASE_RADIUS = 40;
 const MIN_RADIUS = 10;
 const SHAPE_POINTS = 10;
@@ -47,7 +47,8 @@ export default class AsteroidEntity extends Entity {
   }
 
   break() {
-    const ratio = Math.min(Math.max(gaussianRandom(0.5, 0.25), 0), 1);
+    return [this];
+    const ratio = Math.min(Math.max(gaussianRandom(0.5, 0.1), 0), 1);
     const angle = Math.random() * 2 * Math.PI;
     const frag1 = new AsteroidEntity({
       mass: this.mass * ratio,
