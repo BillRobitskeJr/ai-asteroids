@@ -43,39 +43,30 @@ export default class Physics {
   }
 
   collide(entity1, entity2) {
-    const getMomentumChanges = (object, impactor) => {
-      const velocity = Matrix.subtract(impactor.velocity, object.velocity);
-      const distance = Matrix.vectorDistance(object.position, impactor.position);
-      const rotAngle = Math.PI + (velocity.element(2) < 0 ? -1 : 1) * Math.asin((impactor.position.element(1) - object.position.element(1)) / distance);
-      const rotation1 = new Matrix(2, 2, [
-        Math.cos(rotAngle), -1 * Math.sin(rotAngle),
-        Math.sin(rotAngle), Math.cos(rotAngle)
-      ]);
-      const rotation2 = new Matrix(2, 2, [
-        Math.cos(-rotAngle), -1 * Math.sin(-rotAngle),
-        Math.sin(-rotAngle), Math.cos(-rotAngle)
-      ]);
-      const momentum = Matrix.multiply(rotation1, velocity.scale(impactor.mass));
-      return {
-        object: {
-          linear: Matrix.multiply(rotation2, new Matrix(2, 1, [0, momentum.element(2)])),
-          angular: momentum.element(1)
-        },
-        impactor: {
-          linear: Matrix.multiply(rotation2, new Matrix(2, 1, [0, momentum.element(2)])).scale(-1),
-          angular: -momentum.element(1)
-        }
-      }
-    };
-    const applyMomentumDeltas = (entity, delta1, delta2) => {
-      console.log(`Linear Momentum: ${entity.linearMomentum.toString()} + ${delta1.linear.toString()} + ${delta2.linear.toString()} = ${Matrix.add(entity.linearMomentum, Matrix.add(delta1.linear, delta2.linear)).toString()}`);
-      entity.linearMomentum = Matrix.add(entity.linearMomentum, Matrix.add(delta1.linear, delta2.linear));
-      entity.angularMomentum = entity.angularMomentum + delta1.angular + delta2.angular;
-    };
-    const { object: entity1delta1, impactor: entity2delta1 } = getMomentumChanges(entity1, entity2);
-    const { object: entity2delta2, impactor: entity1delta2 } = getMomentumChanges(entity2, entity1);
-    applyMomentumDeltas(entity1, entity1delta1, entity1delta2);
-    applyMomentumDeltas(entity2, entity2delta1, entity2delta2);
+    const separation = Matrix.subtract(entity2.position, entity1.position);
+    const distance = separation.vectorLength;
+    const angle = Math.acos(separation.element(1) / distance) * (separation.element(2) < 0 ? -1 : 1);
+    const rotation = new Matrix(2, 2, [
+      Math.cos(-angle), -1 * Math.sin(-angle),
+      Math.sin(-angle), Math.cos(-angle)
+    ]);
+    const velocity1initial = Matrix.multiply(rotation, entity1.velocity);
+    const velocity2initial = Matrix.multiply(rotation, entity2.velocity);
+    const cmVelocity = (entity1.mass * velocity1initial.element(1) + entity2.mass * velocity2initial.element(1)) / (entity1.mass * entity2.mass);
+    const velocity1final = new Matrix(2, 1, [
+      2 * cmVelocity - velocity1initial.element(1),
+      velocity1initial.element(2)
+    ]);
+    const velocity2final = new Matrix(2, 1, [
+      2 * cmVelocity - velocity2initial.element(1),
+      velocity2initial.element(2)
+    ]);
+    const derotation = new Matrix(2, 2, [
+      Math.cos(angle), -1 * Math.sin(angle),
+      Math.sin(angle), Math.cos(angle)
+    ]);
+    entity1.velocity = Matrix.multiply(derotation, velocity1final);
+    entity2.velocity = Matrix.multiply(derotation, velocity2final);
   }
 
   normalizePoint(point) {

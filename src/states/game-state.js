@@ -8,7 +8,7 @@ export default class GameState {
     const { size } = state;
     this.asteroidInterval = 0.5;
     this.asteroidDelay = 0;
-    this.asteroidLimit = 2;
+    this.asteroidLimit = 3;
     this.size = new Matrix(2, 1, size || [100, 100]);
     this.physics = new Physics({
       spaceSize: new Matrix(2, 1, size || [100, 100])
