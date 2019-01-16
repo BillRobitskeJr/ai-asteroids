@@ -13,8 +13,7 @@ export default class ShipEntity extends Entity {
       position,
       velocity,
       angle,
-      anglularVelocity,
-      thrust
+      anglularVelocity
     } = details;
     super({
       radius: radius || BASE_RADIUS,
@@ -24,7 +23,18 @@ export default class ShipEntity extends Entity {
       angle,
       anglularVelocity
     });
-    this.thrust = thrust || 0;
+    this.isAlive = true;
+  }
+
+  get thrust() {
+    return (this.forces['thrust'] || new Matrix(2, 1)).vectorLength;
+  }
+
+  set thrust(value) {
+    this.forces['thrust'] = new Matrix(2, 1, [
+      value * Math.cos(this.angle),
+      value * Math.sin(this.angle)
+    ]);
   }
 
   getShape() {
@@ -47,6 +57,7 @@ export default class ShipEntity extends Entity {
   }
 
   break() {
+    this.isAlive = false;
     return [];
   }
 }

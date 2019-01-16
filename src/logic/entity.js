@@ -18,6 +18,7 @@ export default class Entity {
     this.velocity = velocity || new Matrix(2, 1);
     this.angle = angle || 0;
     this.angularVelocity = angularVelocity || 0;
+    this.forces = [];
   }
 
   get linearMomentum() {

@@ -2,11 +2,12 @@ import Matrix from '../math/matrix';
 import ShipEntity from '../logic/ship-entity';
 import Physics from '../logic/physics';
 import AsteroidEntity from '../logic/asteroid-entity';
+import ShotEntity from '../logic/shot-entity';
 
 export default class GameState {
   constructor(state) {
     const { size } = state;
-    this.asteroidInterval = 0.5;
+    this.asteroidInterval = 1;
     this.asteroidDelay = 0;
     this.asteroidLimit = 3;
     this.size = new Matrix(2, 1, size || [100, 100]);
@@ -20,29 +21,25 @@ export default class GameState {
     const ship = new ShipEntity({
       position: this.getRandomPosition(),
       velocity: this.getRandomVelocity(),
-      heading: Math.random() * 2 * Math.PI
+      angle: Math.random() * 2 * Math.PI
     });
     this.entities.push(ship);
     return ship;
   }
 
   addShot(fromShip, speed) {
-    // const rotation = new Matrix(2, 2, [
-    //   Math.cos(fromShip.heading), -1 * Math.sin(fromShip.heading),
-    //   Math.sin(fromShip.heading), Math.cos(fromShip.heading)
-    // ]);
-    // const velocity = new Matrix(2, 1, [
-    //   speed * Math.cos(fromShip.heading),
-    //   speed * Math.sin(fromShip.heading)
-    // ]);
-    // const shotState = new ShotState(this, {
-    //   position: Matrix.add(fromShip.position,
-    //                        Matrix.multiply(rotation,
-    //                                        new Matrix(2, 1, [15, 0]))),
-    //   velocity: Matrix.add(velocity, fromShip.velocity)
-    // });
-    // this.shots.push(shotState);
-    // return shotState;
+    if (!fromShip.isAlive) return null;
+    const velocity = new Matrix(2, 1, [
+      speed * Math.cos(fromShip.angle),
+      speed * Math.sin(fromShip.angle)
+    ]);
+    const point = fromShip.getShape()[0];
+    const shot = new ShotEntity({
+      position: point,
+      velocity: Matrix.add(velocity, fromShip.velocity)
+    });
+    this.entities.push(shot);
+    return shot;
   }
 
   addAsteroid() {
@@ -60,7 +57,6 @@ export default class GameState {
   update(interval) {
     this.asteroidDelay += interval;
     const asteroids = this.entities.filter(entity => entity instanceof AsteroidEntity);
-    console.log(`Asteroids in Play: ${asteroids.length}:`, asteroids.map(asteroid => asteroid.velocity.vectorLength));
     if (asteroids.length < this.asteroidLimit && this.asteroidDelay >= this.asteroidInterval) {
       this.addAsteroid();
       this.asteroidDelay = 0;

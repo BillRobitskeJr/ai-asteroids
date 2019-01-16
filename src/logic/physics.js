@@ -9,10 +9,15 @@ export default class Physics {
 
   update(entities, time) {
     entities.forEach(entity => {
-      const newPosition = Matrix.add(entity.position, entity.velocity.scale(time));
-      const newAngle = entity.angle + entity.angularVelocity * time;
-      entity.position = this.normalizePoint(newPosition);
-      entity.angle = this.normalizeAngle(newAngle);
+      const acceleration = Object.values(entity.forces)
+        .reduce((sum, force) => Matrix.add(sum, force), new Matrix(2, 1))
+        .scale(1 / entity.mass);
+      const velocity = Matrix.add(entity.velocity, acceleration.scale(time));
+      const position = Matrix.add(Matrix.add(entity.position, entity.velocity.scale(time)), acceleration.scale(Math.pow(time, 2) / 2));
+      const angle = entity.angle + entity.angularVelocity * time;
+      entity.position = this.normalizePoint(position);
+      entity.velocity = velocity;
+      entity.angle = this.normalizeAngle(angle);
     });
 
     const collisions = this.findCollisions(entities);
