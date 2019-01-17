@@ -8,7 +8,8 @@ const FRAMERATE = 60;
 
 window.addEventListener('load', () => {
   const gameState = new GameState({
-    size: [1000, 1000]
+    size: [1000, 1000],
+    gravity: 10
   });
   const ship = gameState.addShip();
 

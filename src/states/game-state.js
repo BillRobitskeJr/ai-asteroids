@@ -6,13 +6,17 @@ import ShotEntity from '../logic/shot-entity';
 
 export default class GameState {
   constructor(state) {
-    const { size } = state;
+    const {
+      size,
+      gravity
+    } = state;
     this.asteroidInterval = 1;
     this.asteroidDelay = 0;
     this.asteroidLimit = 3;
     this.size = new Matrix(2, 1, size || [100, 100]);
     this.physics = new Physics({
-      spaceSize: new Matrix(2, 1, size || [100, 100])
+      spaceSize: new Matrix(2, 1, size || [100, 100]),
+      gravityConstant: gravity
     });
     this.entities = [];
   }

@@ -78,4 +78,10 @@ export default class Matrix {
     if (matrix2.rows > 1 && matrix2.columns > 1) throw new TypeError(`Second matrix must be 1-dimensional.`);
     return Math.sqrt(matrix1.values.reduce((sum, x, i) => sum + Math.pow(x - matrix2.values[i], 2), 0));
   }
+
+  static unitVector(matrix) {
+    if (matrix.rows > 1 && matrix.colums > 1) throw new TypeError(`Matrix must be 1-dimensional.`);
+    const length = matrix.vectorLength;
+    return new Matrix(2, 1, matrix.values.map(x => x / length));
+  }
 }
