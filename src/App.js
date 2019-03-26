@@ -85,8 +85,11 @@ class App extends Component {
         }, Vector2D())
       }))
       .map(({ asteroid, gravity }) => asteroid.applyLinearForce({ time, force: gravity }))
+    const finalAsteroids = updatedAsteroids
+      .map(asteroid => ({ asteroid, colliders: updatedAsteroids.filter(space.isCollision(asteroid)) }))
+      .map(({ asteroid, colliders }) => colliders.reduce((result, collider) => space.collide(result)(collider)[0], asteroid))
       .map(asteroid => PhysicsObject({ ...asteroid, position: space.constrainVector(asteroid.position) }))
-    this.setState({ asteroids: updatedAsteroids })
+    this.setState({ asteroids: finalAsteroids })
   }
 
   repaintCanvas = ({ context, width, height }) => {
