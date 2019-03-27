@@ -49,6 +49,9 @@ export const isCollision = ({ width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT }) 
 
 export const collide = ({ width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT }) => (physicsObject1 = PhysicsObject()) => (physicsObject2 = PhysicsObject()) => {
   const shortestPath = getShortestPath({ width, height })(physicsObject1)(physicsObject2)
+  const angle = shortestPath.angle
+  const velocity1i = physicsObject1.velocity.rotate(-angle)
+  const velocity2i = physicsObject2.velocity.rotate(-angle)
   return [ physicsObject1, physicsObject2 ]
 }
 
